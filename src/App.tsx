@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { useQuery } from "react-query";
 import { fetchPorts } from "./services/ports";
 import { fetchRates } from "./services/rates";
@@ -39,7 +39,12 @@ function App() {
 
   return (
     <div className="App">
-      <select value={origin} onChange={(e: any) => setOrigin(e.target.value)}>
+      <select
+        value={origin}
+        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+          setOrigin(e.target.value)
+        }
+      >
         <option value="" disabled>
           Choose Tagging
         </option>
@@ -52,7 +57,9 @@ function App() {
       <button onClick={invertPorts}>Invert</button>
       <select
         value={destination}
-        onChange={(e: any) => setDestination(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+          setDestination(e.target.value)
+        }
       >
         <option value="" disabled>
           Choose Tagging

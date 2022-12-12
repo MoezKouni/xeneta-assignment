@@ -16,5 +16,6 @@ export const fetchRates = async ({origin, destination}: RatesArg) => {
     if (axios.isAxiosError(error) && error.response) {
       console.log((error.response?.data).error);
     }
+    throw new Error()
   }
 };

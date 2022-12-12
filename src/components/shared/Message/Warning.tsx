@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Heading from "../Heading";
 import Stack from "../Stack";
 

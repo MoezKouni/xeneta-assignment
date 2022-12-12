@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const SvgContainer = styled.div`
+const Card = styled.div`
   position: relative;
   border: none;
   width: 100%;
@@ -12,4 +12,4 @@ const SvgContainer = styled.div`
   background-color: white;
 `;
 
-export default SvgContainer;
+export default Card;

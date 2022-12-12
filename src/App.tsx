@@ -3,8 +3,12 @@ import { useQuery } from "react-query";
 import { fetchPorts } from "./services/ports";
 import { fetchRates } from "./services/rates";
 import MultilineChart from "./components/MultilineChart";
-import Container from "./components/Container";
+import Container from "./components/shared/Container";
 import Gradients from "./components/Gradients";
+import Select from "./components/shared/Select";
+import Grid from "./components/shared/Grid";
+import Stack from "./components/shared/Stack";
+import MarketPositionList from "./components/MarketPositionList";
 
 interface Port {
   code: string;
@@ -32,13 +36,19 @@ function App() {
     destination: "",
   });
   const [selectedLine, setSelectedLine] = useState<Array<string>>(["high"]);
+  const [ports, setPorts] = useState<Array<{ label: string; value: string }>>(
+    []
+  );
   const [dataChart, setDataChart] = useState<Array<ChartDataItem>>([]);
 
-  const { data: ports, isLoading: isLoadingPorts } = useQuery(
-    "ports",
-    fetchPorts,
-    { refetchOnWindowFocus: false, retry: false }
-  );
+  const { isLoading: isLoadingPorts } = useQuery("ports", fetchPorts, {
+    refetchOnWindowFocus: false,
+    retry: false,
+    onSuccess: (response) =>
+      setPorts(
+        response.map((port: Port) => ({ label: port.name, value: port.code }))
+      ),
+  });
 
   const {
     data: rates,
@@ -93,66 +103,51 @@ function App() {
     }
   }, [rates, selectedLine]);
 
-  const onChangeSelection = useCallback((name: string) => {
-    const newSelectedLine = selectedLine.includes(name)
-      ? selectedLine.filter((item) => item !== name)
-      : [...selectedLine, name];
-    setSelectedLine(newSelectedLine);
-  }, [selectedLine]);
+  const onChangeSelection = useCallback(
+    (name: string) => {
+      const newSelectedLine = selectedLine.includes(name)
+        ? selectedLine.filter((item) => item !== name)
+        : [...selectedLine, name];
+      setSelectedLine(newSelectedLine);
+    },
+    [selectedLine]
+  );
 
   if (isLoadingPorts) return <h1>Loading...</h1>;
 
   return (
     <Container>
-      <select value={input.origin} name="origin" onChange={handleChange}>
-        <option value="" disabled>
-          Choose Tagging
-        </option>
-        {ports.map((port: Port) => (
-          <option key={port.code} value={port.code}>
-            {port.name}
-          </option>
-        ))}
-      </select>
-      <button onClick={invertPorts}>Invert</button>
-      <select
-        value={input.destination}
-        name="destination"
+      <Select
+        name="origin"
+        value={input.origin}
         onChange={handleChange}
-      >
-        <option value="" disabled>
-          Choose Tagging
-        </option>
-        {ports.map((port: Port) => (
-          <option key={port.code} value={port.code}>
-            {port.name}
-          </option>
-        ))}
-      </select>
+        disabledOption={input.destination}
+        placeholder="Choose an origin"
+        options={ports}
+      />
+      <button onClick={invertPorts}>Invert</button>
+      <Select
+        name="destination"
+        value={input.destination}
+        onChange={handleChange}
+        disabledOption={input.origin}
+        placeholder="Choose a destination"
+        options={ports}
+      />
       <Gradients />
       <div>
-        <h1>Origin: {input.origin}</h1>
-        <h1>Destination: {input.destination}</h1>
-        {["low", "mean", "high"].map((line: string) => (
-          <div className="checkbox" key={line}>
-            {line !== "Portfolio" && (
-              <input
-                type="checkbox"
-                value={line}
-                id={line}
-                checked={selectedLine.includes(line)}
-                onChange={() => onChangeSelection(line)}
-              />
-            )}
-            <label htmlFor={line}>{line}</label>
-          </div>
-        ))}
-        <MultilineChart
-          isLoading={isLoadingRates}
-          isError={isErrorRates}
-          data={dataChart}
-          selectedLine={selectedLine}
-        />
+        <Grid gridTemplateColumns="300px 1fr" gap="20px">
+          <MarketPositionList
+            selectedLine={selectedLine}
+            onChangeSelection={onChangeSelection}
+          />
+          <MultilineChart
+            isLoading={isLoadingRates}
+            isError={isErrorRates}
+            data={dataChart}
+            selectedLine={selectedLine}
+          />
+        </Grid>
       </div>
     </Container>
   );

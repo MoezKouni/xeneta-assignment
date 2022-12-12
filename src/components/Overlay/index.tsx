@@ -1,8 +1,8 @@
-import { useCallback } from "react";
+import { ReactElement, useCallback } from "react";
 import styled from "styled-components";
-import Error from "../Message/Error";
-import Loading from "../Message/Loading";
-import Warning from "../Message/Warning";
+import Error from "../shared/Message/Error";
+import Loading from "../shared/Message/Loading";
+import Warning from "../shared/Message/Warning";
 
 interface Props {
   isError: boolean;
@@ -11,12 +11,12 @@ interface Props {
   noLineSelected: boolean;
 }
 
-export default function ({
+export default function Overlay ({
   isError,
   isInitial,
   isLoading,
   noLineSelected,
-}: Props) {
+}: Props): ReactElement {
   const message = useCallback(() => {
     if (isLoading) {
       return <Loading />;
@@ -27,12 +27,12 @@ export default function ({
     } else if (isInitial) {
       return <Warning text="Please select Origin and Destination Port."/>;
     }
-  }, [isError, isInitial, isLoading]);
+  }, [isError, isInitial, isLoading, noLineSelected]);
 
-  return <Overlay>{message()}</Overlay>;
+  return <StyledOverlay>{message()}</StyledOverlay>;
 }
 
-const Overlay = styled.div`
+const StyledOverlay = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { nest } from "d3-collection";
-import SvgContainer from "../Card";
-import When from "../When";
+import Card from "../Card";
+import When from "../shared/When";
 import Overlay from "../Overlay";
 
 interface DataChartItem {
@@ -24,12 +24,12 @@ export default function MultilineChart({
   data,
   selectedLine,
 }: Props) {
-  // to detect what line to animate we should store previous data state
+  // to detect the new line to animate, we should store the previous one
   const [prevItems, setPrevItems] = useState<Array<string>>([]);
   const svgRef = useRef<SVGSVGElement>(null);
   const dimensions = {
     width: 1000,
-    height: 300,
+    height: 350,
     margin: {
       top: 30,
       right: 30,
@@ -147,11 +147,11 @@ export default function MultilineChart({
       }
     });
     setPrevItems(selectedLine);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  console.log(data)
   return (
-    <SvgContainer>
+    <Card>
       <When condition={isError || !data.length || isLoading}>
         <Overlay
           isError={isError}
@@ -161,6 +161,6 @@ export default function MultilineChart({
         />
       </When>
       <svg ref={svgRef} width={svgWidth} height={svgHeight} />
-    </SvgContainer>
+    </Card>
   );
 }

@@ -13,6 +13,20 @@ export const Checkbox = styled.input<{ bg: string }>`
   &:checked ~ span {
     background-color: ${(props) => props.bg};
   }
+  &:checked ~ span:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  &:checked ~ span:after {
+    display: block;
+  }
 `;
 
 export const CustomCheckbox = styled.span<{ bg: string }>`
@@ -22,9 +36,14 @@ export const CustomCheckbox = styled.span<{ bg: string }>`
   height: 20px;
   width: 20px;
   background-color: white;
-  border: 1px solid #d4d4d4;
-  border-radius: 8px;
+  border: 1px solid #efefef;
+  border-radius: 5px;
   margin-right: 10px;
+  &:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
 `;
 
 export const Label = styled.label<CheckboxProps>`

@@ -28,8 +28,8 @@ export default function MarketPositionList({
   }, []);
 
   return (
-    <Stack direction="column" padding="1.5rem" background="white" rounded>
-      <Heading margin="10px" marginBottom="20px">Market Position</Heading>
+    <Stack direction="column">
+      <Heading margin="10px" marginBottom="20px" fontSize="20px">Market Position</Heading>
       {markets.map((line: string) => (
         <Styled.CheckboxGroup key={line}>
           <Styled.Checkbox

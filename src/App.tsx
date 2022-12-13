@@ -9,8 +9,11 @@ import Select from "./components/shared/Select";
 import Grid from "./components/shared/Grid";
 import Stack from "./components/shared/Stack";
 import MarketPositionList from "./components/MarketPositionList";
+import SelectGroup from "./components/SelectGroup";
+import Center from "./components/shared/Center";
+import Divider from "./components/shared/Divider";
 
-interface Port {
+export interface Port {
   code: string;
   name: string;
 }
@@ -29,6 +32,10 @@ interface Input {
   origin: string;
   destination: string;
 }
+export type Options = Array<{
+  label: string;
+  value: string;
+}>;
 
 function App() {
   const [input, setInput] = useState<Input>({
@@ -36,9 +43,7 @@ function App() {
     destination: "",
   });
   const [selectedLine, setSelectedLine] = useState<Array<string>>(["high"]);
-  const [ports, setPorts] = useState<Array<{ label: string; value: string }>>(
-    []
-  );
+  const [ports, setPorts] = useState<Options>([]);
   const [dataChart, setDataChart] = useState<Array<ChartDataItem>>([]);
 
   const { isLoading: isLoadingPorts } = useQuery("ports", fetchPorts, {
@@ -78,23 +83,22 @@ function App() {
     [input]
   );
 
+  const groupByMarketPosition = useCallback(
+    (name: "mean" | "low" | "high") => {
+      return rates.map((rate: Rate) => ({
+        name,
+        day: rate.day,
+        value: rate[name],
+      }));
+    },
+    [rates]
+  );
+
   useEffect(() => {
     if (rates) {
-      const mean = rates.map((rate: Rate) => ({
-        name: "mean",
-        day: rate.day,
-        value: rate.mean,
-      }));
-      const low = rates.map((rate: Rate) => ({
-        name: "low",
-        day: rate.day,
-        value: rate.low,
-      }));
-      const high = rates.map((rate: Rate) => ({
-        name: "high",
-        day: rate.day,
-        value: rate.high,
-      }));
+      const mean = groupByMarketPosition("mean");
+      const low = groupByMarketPosition("low");
+      const high = groupByMarketPosition("high");
 
       const chartData = [...mean, ...low, ...high].filter(
         (chart: ChartDataItem) => selectedLine.includes(chart.name)
@@ -113,34 +117,25 @@ function App() {
     [selectedLine]
   );
 
-  if (isLoadingPorts) return <h1>Loading...</h1>;
-
   return (
     <Container>
-      <Select
-        name="origin"
-        value={input.origin}
-        onChange={handleChange}
-        disabledOption={input.destination}
-        placeholder="Choose an origin"
-        options={ports}
-      />
-      <button onClick={invertPorts}>Invert</button>
-      <Select
-        name="destination"
-        value={input.destination}
-        onChange={handleChange}
-        disabledOption={input.origin}
-        placeholder="Choose a destination"
-        options={ports}
-      />
       <Gradients />
-      <div>
-        <Grid gridTemplateColumns="300px 1fr" gap="20px">
-          <MarketPositionList
-            selectedLine={selectedLine}
-            onChangeSelection={onChangeSelection}
-          />
+      <Center>
+        <Grid gridTemplateColumns={{base: "1fr", md: "300px 1fr"}} gap="20px">
+          <Stack direction="column" padding="1.5rem" background="white" rounded>
+            <SelectGroup
+              handleChange={handleChange}
+              input={input}
+              invertPorts={invertPorts}
+              ports={ports}
+              loading={isLoadingPorts}
+            />
+            <Divider />
+            <MarketPositionList
+              selectedLine={selectedLine}
+              onChangeSelection={onChangeSelection}
+            />
+          </Stack>
           <MultilineChart
             isLoading={isLoadingRates}
             isError={isErrorRates}
@@ -148,7 +143,7 @@ function App() {
             selectedLine={selectedLine}
           />
         </Grid>
-      </div>
+      </Center>
     </Container>
   );
 }

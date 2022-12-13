@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import StyledSelect from "./styled";
 
 interface Option {
   label: string;
@@ -10,7 +11,8 @@ interface Props {
   options: Array<Option>;
   name: string;
   placeholder: string;
-  disabledOption: string
+  disabledOption: string;
+  disabled?: boolean;
 }
 
 export default function Select({
@@ -19,10 +21,11 @@ export default function Select({
   options,
   name,
   placeholder,
-  disabledOption
+  disabledOption,
+  disabled = false
 }: Props) {
   return (
-    <select value={value} name={name} onChange={onChange}>
+    <StyledSelect value={value} name={name} onChange={onChange} disabled={disabled}>
       <option value="" disabled>
         {placeholder}
       </option>
@@ -31,6 +34,6 @@ export default function Select({
           {option.label}
         </option>
       ))}
-    </select>
+    </StyledSelect>
   );
 }

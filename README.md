@@ -5,6 +5,7 @@ A web application allows you to visualize the rates between two ports in a multi
 * This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 * Typescript
 * For drawing charts: [D3.js](https://d3js.org/)
+* For styling: [styled-components](https://styled-components.com/)
 * For data fetching and caching: [react-query](https://react-query-v3.tanstack.com/)
 * For http request [Axios](https://axios-http.com/)
 * For mocking the api (for testing purposes) [MSW](https://mswjs.io/)

@@ -35,7 +35,7 @@ export default function Select({
         {loading ? "Loading..." : placeholder}
       </option>
       {options
-        .filter((option: Option) => option.value !== disabledOption)
+        .filter((option: Option) => option.value !== disabledOption) // remove the selected option in the other select tag, to prevent the selection of the same Port from happening
         .map((option: Option) => (
           <option key={option.label} value={option.value}>
             {option.label}

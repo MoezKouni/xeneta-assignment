@@ -27,6 +27,7 @@ export default function MultilineChart({
   // to detect the new line to animate, we should store the previous one
   const [prevItems, setPrevItems] = useState<Array<string>>([]);
   const svgRef = useRef<SVGSVGElement>(null);
+  // svg dimensions
   const dimensions = {
     width: 1000,
     height: 350,
@@ -41,6 +42,7 @@ export default function MultilineChart({
   const svgWidth = width + margin.left + margin.right;
   const svgHeight = height + margin.top + margin.bottom;
 
+  // default color of each line
   const color = useCallback((lineName: string) => {
     switch (lineName) {
       case "low":
@@ -61,7 +63,7 @@ export default function MultilineChart({
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const parseTime = d3.timeFormat("%b %d");
+    const parseTime = d3.timeFormat("%b %d"); // format the time for the path
 
     data.forEach(function (d: DataChartItem) {
       d.day = parseTime(new Date(d.day));
@@ -74,14 +76,16 @@ export default function MultilineChart({
         d3.extent(data, function (d: any) {
           return new Date(d.day);
         }) as any
-      )
-      .range([0, width]);
+      ) // domain will be the "day" from first to last item in our data
+      .range([0, width]); // the width of the X axis, visually, from 0 to the width of the svg (declared above)
 
+    //scale yAxis
     let yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d: any) => d.value) + 200])
-      .range([height, 0]);
+      .domain([0, d3.max(data, (d: any) => d.value) + 200]) // domain will be from 0 to highest value + 200 for extra space in the end
+      .range([height, 0]); // the height of the Y axis, visually, from height (declared above) to 0 of the svg
 
+    // xAxis ticks
     let xAxis = d3
       .axisBottom(xScale)
       .tickFormat((el: any) => {
@@ -93,6 +97,7 @@ export default function MultilineChart({
         }) as any
       );
 
+    // draw xAxis
     const xAxisGroup = svg
       .append("g")
       .classed("x axis", true)
@@ -108,14 +113,17 @@ export default function MultilineChart({
       .attr("color", "grey")
       .attr("font-size", "0.6rem");
 
+    // yAxis ticks
     const yAxis = d3.axisLeft(yScale).tickFormat((val) => `${val} $`);
 
     svg.append("g").classed("y axis", true).call(yAxis);
 
+    // group our data by name attribute so we can draw multiple lines according to the name value
     const sumstat = nest()
       .key((d: any) => d.name)
       .entries(data);
 
+    // draw lines
     const lines = svg
       .selectAll(".line")
       .append("g")

@@ -41,19 +41,26 @@ function App() {
     origin: "",
     destination: "",
   });
+  // which line(s) will be displayed in the chart
   const [selectedLine, setSelectedLine] = useState<Array<string>>(["high"]);
+  // ports will be displayed in the select tag
   const [ports, setPorts] = useState<Options>([]);
+  // extract the "low", "mean" and "high" attributes into seperate object
+  // e.g [{name: "low", day: "2022-01-01", value: 102},{name: "high", day: "2022-01-02", value: 650}]...
   const [dataChart, setDataChart] = useState<Array<ChartDataItem>>([]);
 
+  // fetch ports on mounting
   const { isLoading: isLoadingPorts } = useQuery("ports", fetchPorts, {
     refetchOnWindowFocus: false,
     retry: false,
     onSuccess: (response) =>
+      // change the format of the response and store it in the ports state
       setPorts(
         response.map((port: Port) => ({ label: port.name, value: port.code }))
       ),
   });
 
+  // fetch rates
   const {
     data: rates,
     isLoading: isLoadingRates,
@@ -62,7 +69,7 @@ function App() {
     ["rates", input.origin, input.destination],
     () => fetchRates({ origin: input.origin, destination: input.destination }),
     {
-      enabled: Boolean(input.origin && input.destination),
+      enabled: Boolean(input.origin && input.destination), // this query will be triggered only when origin and destination are selected
       refetchOnWindowFocus: false,
       retry: false,
     }
@@ -95,6 +102,7 @@ function App() {
 
   useEffect(() => {
     if (rates) {
+      // extract the "low", "mean" and "high" attributes into seperate array of object like mentioned above
       const mean = groupByMarketPosition("mean");
       const low = groupByMarketPosition("low");
       const high = groupByMarketPosition("high");
@@ -109,6 +117,7 @@ function App() {
 
   const onChangeSelection = useCallback(
     (name: string) => {
+      // set the selected line: "low", "high" or "mean"
       const newSelectedLine = selectedLine.includes(name)
         ? selectedLine.filter((item) => item !== name)
         : [...selectedLine, name];
@@ -123,6 +132,7 @@ function App() {
       <Center>
         <Grid gridTemplateColumns={{ base: "1fr", lg: "300px 1fr" }} gap="20px">
           <Stack direction="column" padding="1.5rem" background="white" rounded>
+            {/* select and invert button */}
             <SelectGroup
               handleChange={handleChange}
               input={input}
@@ -131,11 +141,13 @@ function App() {
               loading={isLoadingPorts}
             />
             <Divider />
+            {/* checkbox group component */}
             <MarketPositionList
               selectedLine={selectedLine}
               onChangeSelection={onChangeSelection}
             />
           </Stack>
+          {/* chart component */}
           <MultilineChart
             isLoading={isLoadingRates}
             isError={isErrorRates}

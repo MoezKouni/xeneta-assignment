@@ -31,7 +31,7 @@ export default function SelectGroup({
         name="origin"
         value={input.origin}
         onChange={handleChange}
-        disabledOption={input.destination}
+        disabledOption={input.destination} // the selected Port in the other select tag
         placeholder={"Choose an origin"}
         loading={loading}
         options={ports}
@@ -41,7 +41,7 @@ export default function SelectGroup({
         name="destination"
         value={input.destination}
         onChange={handleChange}
-        disabledOption={input.origin}
+        disabledOption={input.origin} // the selected Port in the other select tag
         placeholder={"Choose a destination"}
         loading={loading}
         options={ports}

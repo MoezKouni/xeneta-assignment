@@ -5,7 +5,6 @@ import { fetchRates } from "./services/rates";
 import MultilineChart from "./components/MultilineChart";
 import Container from "./components/shared/Container";
 import Gradients from "./components/Gradients";
-import Select from "./components/shared/Select";
 import Grid from "./components/shared/Grid";
 import Stack from "./components/shared/Stack";
 import MarketPositionList from "./components/MarketPositionList";
@@ -105,6 +104,7 @@ function App() {
       );
       setDataChart(chartData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rates, selectedLine]);
 
   const onChangeSelection = useCallback(
@@ -121,7 +121,7 @@ function App() {
     <Container>
       <Gradients />
       <Center>
-        <Grid gridTemplateColumns={{base: "1fr", md: "300px 1fr"}} gap="20px">
+        <Grid gridTemplateColumns={{ base: "1fr", md: "300px 1fr" }} gap="20px">
           <Stack direction="column" padding="1.5rem" background="white" rounded>
             <SelectGroup
               handleChange={handleChange}

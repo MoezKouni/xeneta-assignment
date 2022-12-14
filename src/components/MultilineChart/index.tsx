@@ -129,13 +129,14 @@ export default function MultilineChart({
           .x((d: any) => xScale(new Date(d.day)))
           .y((d: any) => yScale(d.value))(d.values);
       })
+      .attr("role", "path")
       .attr("fill", "none")
       .attr("stroke", (d: any) => color(d.key))
       .attr("stroke-width", 3);
 
     lines.each((d: any, i: any, nodes: any) => {
       const element = nodes[i];
-      const length = element.getTotalLength();
+      const length = element?.getTotalLength || 1000;
       if (!prevItems.includes(d.key)) {
         d3.select(element)
           .attr("stroke-dasharray", `${length},${length}`)
@@ -147,7 +148,7 @@ export default function MultilineChart({
       }
     });
     setPrevItems(selectedLine);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (

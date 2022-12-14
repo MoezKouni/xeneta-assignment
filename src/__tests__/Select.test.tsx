@@ -52,7 +52,7 @@ describe("Ports test suite", () => {
   test("should correctly set options", () => {
     server.use(
       rest.get(`${process.env.REACT_APP_API_URL}/ports`, (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([]));
+        return res(ctx.status(200));
       })
     );
     render(

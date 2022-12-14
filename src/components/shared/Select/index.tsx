@@ -22,18 +22,25 @@ export default function Select({
   name,
   placeholder,
   disabledOption,
-  loading
+  loading,
 }: Props) {
   return (
-    <StyledSelect value={value} name={name} onChange={onChange} disabled={loading}>
+    <StyledSelect
+      value={value}
+      name={name}
+      onChange={onChange}
+      disabled={loading}
+    >
       <option value="" disabled>
         {loading ? "Loading..." : placeholder}
       </option>
-      {options.filter((option: Option) => option.value !== disabledOption).map((option: Option) => (
-        <option key={option.label} value={option.value} role="option">
-          {option.label}
-        </option>
-      ))}
+      {options
+        .filter((option: Option) => option.value !== disabledOption)
+        .map((option: Option) => (
+          <option key={option.label} value={option.value}>
+            {option.label}
+          </option>
+        ))}
     </StyledSelect>
   );
 }

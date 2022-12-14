@@ -32,8 +32,8 @@ export default function SelectGroup({
         value={input.origin}
         onChange={handleChange}
         disabledOption={input.destination}
-        placeholder={loading ? "Loading..." : "Choose an origin"}
-        disabled={loading}
+        placeholder={"Choose an origin"}
+        loading={loading}
         options={ports}
       />
       <Button onClick={invertPorts}><ExchangeIcon /></Button>
@@ -42,8 +42,8 @@ export default function SelectGroup({
         value={input.destination}
         onChange={handleChange}
         disabledOption={input.origin}
-        placeholder={loading ? "Loading..." : "Choose a destination"}
-        disabled={loading}
+        placeholder={"Choose a destination"}
+        loading={loading}
         options={ports}
       />
     </Stack>

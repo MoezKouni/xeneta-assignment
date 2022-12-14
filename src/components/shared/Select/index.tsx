@@ -11,8 +11,8 @@ interface Props {
   options: Array<Option>;
   name: string;
   placeholder: string;
-  disabledOption: string;
-  disabled?: boolean;
+  disabledOption?: string;
+  loading?: boolean;
 }
 
 export default function Select({
@@ -22,15 +22,15 @@ export default function Select({
   name,
   placeholder,
   disabledOption,
-  disabled = false
+  loading
 }: Props) {
   return (
-    <StyledSelect value={value} name={name} onChange={onChange} disabled={disabled}>
+    <StyledSelect value={value} name={name} onChange={onChange} disabled={loading}>
       <option value="" disabled>
-        {placeholder}
+        {loading ? "Loading..." : placeholder}
       </option>
       {options.filter((option: Option) => option.value !== disabledOption).map((option: Option) => (
-        <option key={option.label} value={option.value}>
+        <option key={option.label} value={option.value} role="option">
           {option.label}
         </option>
       ))}

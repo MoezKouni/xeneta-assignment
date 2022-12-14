@@ -121,7 +121,7 @@ function App() {
     <Container>
       <Gradients />
       <Center>
-        <Grid gridTemplateColumns={{ base: "1fr", md: "300px 1fr" }} gap="20px">
+        <Grid gridTemplateColumns={{ base: "1fr", lg: "300px 1fr" }} gap="20px">
           <Stack direction="column" padding="1.5rem" background="white" rounded>
             <SelectGroup
               handleChange={handleChange}

@@ -44,3 +44,15 @@ code {
   height: 588px;
   background: radial-gradient(50% 50% at 50% 50%, #f4ce94 0, rgba(244, 206, 148, 0) 100%);
   }
+
+@media (max-width: 767px) {
+  .gradient.purple{
+    width: 50vw;
+  }
+  .gradient.orange{
+    width: 70vw;
+  }
+  .gradient.yellow{
+    width: 100vw;
+  }
+}

@@ -5,6 +5,7 @@ const Center = styled.div`
   min-height: 100vh;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 `;
 
 export default Center;

@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 import Select from "../shared/Select";
-import { ReactComponent as ExchangeIcon } from "../../exchange.svg"
+import { ReactComponent as ExchangeIcon } from "../../assets/exchange.svg"
 import Button from "../shared/Button";
 import Stack from "../shared/Stack";
 

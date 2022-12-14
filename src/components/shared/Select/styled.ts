@@ -1,4 +1,4 @@
-import earthIcon from "../../../earth.svg";
+import earthIcon from "../../../assets/earth.svg";
 import styled from "styled-components";
 
 const StyledSelect = styled.select`
